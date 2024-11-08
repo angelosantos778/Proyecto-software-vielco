@@ -1,0 +1,40 @@
+name: Generate Commit Summary with AI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ai-summary:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install OpenAI package
+        run: pip install openai
+
+      - name: Analyze Changes and Generate Summary
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          # Detect changes in the specified HTML file
+          DIFF=$(git diff HEAD~1 -- Proyecto/src/app/inicio/inicio.component.html)
+          
+          # Generate summary using a Python script
+          echo "$DIFF" > diff.txt
+          python generate_summary.py diff.txt > commit_summary.txt
+          
+          # Add the summary to the commit message
+          COMMIT_MSG=$(cat commit_summary.txt)
+          git commit --amend -m "$COMMIT_MSG"
+      
+      - name: Push changes
+        run: git push origin main --force

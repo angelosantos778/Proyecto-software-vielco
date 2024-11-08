@@ -1,0 +1,117 @@
+<div class=" bg-gradient-to-r from-green-300 to-green-300 w-90 h-screen" >
+    <div class="grid grid-rows 3 grid-flow-col gap-4">
+        <div class=" row-span-3 px-12 py-4 w-80 h-screen bg-rose-400">
+            <h6 class="py-4 text-center text-2xl font-bold">Bienvenidos a</h6>
+            <div class="px-12">
+            <img  src="https://peru.vielco.com/img/vielcostore-logo-1551383268.jpg">
+            </div>
+            <div class="h-56 grid grid-cols-1 gap-4 content-between ">
+            <div class="pt-10 ">
+                <button  routerLink="/menu" class=" w-60 h-10 bg-zinc-300 text-center cursor-pointer rounded-lg font-medium hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none focus:ring focus:ring-cyan-300 " >Inicio</button>
+            </div>
+            <div class="pt-3">
+                <button class=" w-60 h-10  bg-zinc-300 text-center cursor-pointer rounded-lg font-medium hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none focus:ring focus:ring-cyan-300 ">
+                    Pedidos </button>
+            </div>
+            <div class="pt-3" >
+                <button class=" w-60 h-10  bg-zinc-300 text-center cursor-pointe rounded-lg font-medium hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none focus:ring focus:ring-cyan-300 ">
+                    Inventario </button>
+            </div>
+            <div  class="pt-3">
+                <button  routerLink="/empleadorrhh"  class=" w-60 h-10  bg-zinc-300 text-center cursor-pointer rounded-lg font-medium hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none focus:ring focus:ring-cyan-300 ">
+                    Catalogo </button>
+            </div>
+            <div  class="pt-32">
+                <button routerLink="/login"  class=" w-60 h-10  bg-zinc-300 text-center  cursor-pointer rounded-lg font-medium hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none focus:ring focus:ring-cyan-300 ">
+                    Salir</button>
+            </div>
+            </div> 
+        </div>  
+        <div class= "col-span-2">
+            <div class="px-80 pt-40 grid grid-cols-3 gap-20">
+                <div>
+                    <button class="w-60 h-10  bg-blue-300 text-center cursor-pointe rounded-lg font-medium hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none focus:ring focus:ring-cyan-300">Añadir Producto</button>
+                </div>
+                <div>
+                    <button class="w-60 h-10  bg-blue-300 text-center cursor-pointe rounded-lg font-medium hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none focus:ring focus:ring-cyan-300">Modificar Producto</button>
+                </div>
+                <div>
+                    <button class="w-60 h-10  bg-blue-300 text-center cursor-pointe rounded-lg font-medium hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none focus:ring focus:ring-cyan-300">Eliminar Producto</button>
+                </div> 
+            </div>
+            <div class="px-80 grid grid-cols-2">
+                <div class="pt-10 text-right">
+                    <button class="w-40 h-10  bg-gray-400 cursor-pointe rounded-lg font-medium focus:outline-none focus:ring focus:ring-black">Buscar</button>
+                </div>
+                <div class="pt-10 pl-0.485" >
+                    <select id="criterio-buscar" class="w-full border border-gray-300 rounded-md h-10 w-80">
+                      <option value="">Código</option>
+                      <option value="nombre">Nombre</option>
+                      <option value="marca">Marca</option>
+                      <option value="modelo">Modelo</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row-span-2 grid grid-cols-2 gap-4">
+            <div class="pl-40 pt-4 text-right">
+                <p class="text-lg">Codigo del producto</p>
+            </div>
+            <div class="pt-4" >
+                <input type="text" name="codigo" class="rounded-lg h-10 w-80">
+            </div>
+            <div class="pl-40 pt-4 text-right">
+                <p class="text-lg">Nombre del producto</p>
+            </div>
+            <div class="pt-4" >
+                <input type="text" name="nombre" class="rounded-lg h-10 w-80">
+            </div>
+            <div class="pl-40 pt-4 text-right">
+                <p class="text-lg">Marca</p>
+            </div>
+            <div class="pt-4" >
+                <input type="text" name="marca" class="rounded-lg h-10 w-80">
+            </div>
+            <div class="pl-40 pt-4 text-right">
+                <p class="text-lg">Modelo</p>
+            </div>
+            <div class="pt-4" >
+                <input type="text" name="modelo" class="rounded-lg h-10 w-80">
+            </div>
+            <div class="pl-40 pt-4 text-right">
+                <p class="text-lg">Peso</p>
+            </div>
+            <div class="pt-4" >
+                <input type="text" name="Peso" class="rounded-lg h-10 w-80">
+            </div>
+            <div class="pl-40 pt-4 text-right">
+                <p class="text-lg">Precio</p>
+            </div>
+            <div class="pt-4" >
+                <input type="text" name="precio" class="rounded-lg h-10 w-80">
+            </div>
+            <div class="visible md:invisible pl-40 pt-4 text-right">
+                <p class="text-lg">Botton</p>
+            </div>
+            <div class="pt-4">
+                <button class="w-80 h-10  bg-red-400 cursor-pointe rounded-lg font-medium hover:bg-cyan-600 active:bg-cyan-700 focus:outline-none focus:ring focus:ring-cyan-300">Actualizar Producto</button>
+            </div>
+        </div>
+
+        <div class="row-span-2">
+            <div class="p-20">
+                <img src="https://vielco.com/wp-content/uploads/2021/06/305011011_01-1-150x150.jpg" alt="Producto 1" class="w-full h-100 object-cover rounded-t-lg">
+            </div>
+        </div>
+    </div>
+    <div class="fixed inset-0 flex items-center justify-center z-50">
+        <div class="absolute bg-gray-400 opacity-80 inset-0"></div>
+        <div class="bg-lime-400 shadow-lg rounded border border-black rounded-md px-20 opacity-90 pt-4 pb-4">
+          <h2 class="bg-blue-200 text-2xl font-bold text-center mb-8">Mensaje</h2>
+          <p class="text-2xl font-bold">Cambios guardados correctamente</p>
+          <button class=" hover:bg-white text-black font-bold py-2 px-10 rounded mt-8" type="button">
+            Cerrar
+          </button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+
+<h2>Búsqueda de Prorductos</h2>
+<input type="text" name="nombre" placeholder="Ingrese nombre Producto" [(ngModel)]="nombre">
+<button type="button" (click)="buscar()">Buscar</button>
+
+<div class="container- full px-4">
+  <div class="grid grid-rows">
+    <article  class="p-4" *ngFor=" let item of lista_producto">
+        <h6 class="text center text-sm text-gray-400">{{item.codigoProducto}}</h6>
+        <h6 class="text center text-sm text-gray-400">{{item.descripcion}}</h6>
+        <h6 class="text center text-sm text-gray-400">{{item.marca}}</h6>
+        <h6 class="text center text-sm text-gray-400">{{item.modelo}}</h6>
+        <h6 class="text center text-sm text-gray-400">{{item.codigoPrecio}}</h6>
+        <h6 class="text center text-sm text-gray-400">{{item.codigo_categoria.nombre}}</h6>
+    </article>
+  </div>
+</div>
+
+
+
+
+  

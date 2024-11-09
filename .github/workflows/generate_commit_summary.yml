@@ -43,7 +43,7 @@ jobs:
                 COMMIT_MSG=$(cat commit_summary.txt)
                 git config --global user.name "github-actions[bot]"
                 git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                git add Proyecto
+                git add .
                 git commit -m "$COMMIT_MSG"
               else
                 echo "No se detectaron cambios en diff.txt para generar un resumen."
@@ -76,7 +76,6 @@ jobs:
             cat actions_recommendations.txt
           else
             echo "No hay recomendaciones para cambios en los flujos de trabajo de GitHub Actions."
-          fi
 
       - name: Push changes
         if: success()  

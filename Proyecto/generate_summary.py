@@ -5,7 +5,8 @@ import sys
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def generate_summary(diff_text):
-    prompt = f"Summarize the following changes in an HTML file:\n{diff_text}"
+    # Cambia el prompt para que sea más general y aplicable a cualquier cambio
+    prompt = f"Summarize the following changes in the 'Proyecto' directory:\n{diff_text}"
     
     response = openai.Completion.create(
         model="text-davinci-003",
@@ -19,7 +20,7 @@ if __name__ == "__main__":
     with open(sys.argv[1], 'r') as f:
         diff_text = f.read()
     
-    # Check if diff_text is not empty before calling the API
+    # Verifica si diff_text no está vacío antes de llamar a la API
     if diff_text.strip():
         summary = generate_summary(diff_text)
         print(summary)

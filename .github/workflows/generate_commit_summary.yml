@@ -28,44 +28,47 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # Verificar si hay más de un commit en el historial
-          if [ $(git rev-list --count HEAD) -gt 1 ]; then
-            # Detectar cambios en toda la carpeta 'Proyecto'
+          # Verificar si hay commits previos
+          if git rev-parse HEAD~1 >/dev/null 2>&1; then
+            # Usar HEAD~1 si hay commits previos
             DIFF=$(git diff HEAD~1 -- Proyecto)
-            
-            # Si DIFF no está vacío, procede
-            if [ -n "$DIFF" ]; then
-              echo "$DIFF" > diff.txt
-              
-              # Generar el resumen del commit
-              python Proyecto/generate_summary.py diff.txt > commit_summary.txt
-              
-              # Solo crear un commit si commit_summary.txt tiene contenido
-              if [ -s commit_summary.txt ]; then
-                COMMIT_MSG=$(cat commit_summary.txt)
-                git config --global user.name "github-actions[bot]"
-                git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                git add Proyecto
-                git commit -m "$COMMIT_MSG"
-              else
-                echo "No se detectaron cambios en diff.txt para generar un resumen."
-              fi
+          else
+            # Usar --root si es el primer commit
+            DIFF=$(git diff --root -- Proyecto)
+          fi
 
-              # Generar recomendaciones de mejora
-              python Proyecto/generate_recommendations.py diff.txt > Proyecto/recommendations.txt
-              if [ -s recommendations.txt ]; then
-                echo "=== Recomendaciones de Mejora ==="
-                cat recommendations.txt
-              else
-                echo "No se generaron recomendaciones para los cambios."
-              fi
+          # Si DIFF no está vacío, procede
+          if [ -n "$DIFF" ]; then
+            echo "$DIFF" > diff.txt
+            
+            # Generar el resumen del commit
+            python Proyecto/generate_summary.py diff.txt > commit_summary.txt
+            
+            # Solo crear un commit si commit_summary.txt tiene contenido
+            if [ -s commit_summary.txt ]; then
+              COMMIT_MSG=$(cat commit_summary.txt)
+              git config --global user.name "github-actions[bot]"
+              git config --global user.email "github-actions[bot]@users.noreply.github.com"
+              git add Proyecto
+              git commit -m "$COMMIT_MSG"
             else
-              echo "No se detectaron cambios en la carpeta 'Proyecto'."
+              echo "No se detectaron cambios en diff.txt para generar un resumen."
+            fi
+
+            # Generar recomendaciones de mejora
+            python Proyecto/generate_recommendations.py diff.txt > Proyecto/recommendations.txt
+            if [ -s Proyecto/recommendations.txt ]; then
+              echo "=== Recomendaciones de Mejora ==="
+              cat Proyecto/recommendations.txt
+            else
+              echo "No se generaron recomendaciones para los cambios."
             fi
           else
-            echo "No hay suficientes commits para generar un diff."
+            echo "No se detectaron cambios en la carpeta 'Proyecto'."
           fi
 
       - name: Push changes
         if: success()
         run: git push origin main
+
+

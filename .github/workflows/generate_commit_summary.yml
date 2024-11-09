@@ -57,12 +57,17 @@ jobs:
 
       - name: Check for GitHub Actions Workflow Changes
         run: |
-          ACTIONS_DIFF=$(git diff HEAD~1 -- .github/workflows)
-          if [ -n "$ACTIONS_DIFF" ]; then
-            echo "$ACTIONS_DIFF" > actions_diff.txt
-            python Proyecto/generate_actions_recommendations.py actions_diff.txt > actions_recommendations.txt
+          # Verificar si hay más de un commit en el historial
+          if [ $(git rev-list --count HEAD) -gt 1 ]; then
+            ACTIONS_DIFF=$(git diff HEAD~1 -- .github/workflows)
+            if [ -n "$ACTIONS_DIFF" ]; then
+              echo "$ACTIONS_DIFF" > actions_diff.txt
+              python Proyecto/generate_actions_recommendations.py actions_diff.txt > actions_recommendations.txt
+            else
+              echo "No se detectaron cambios en los flujos de trabajo de GitHub Actions."
+            fi
           else
-            echo "No se detectaron cambios en los flujos de trabajo de GitHub Actions."
+            echo "No hay suficientes commits para generar un diff en el flujo de trabajo."
         
       - name: Display Recommendations
         if: success()
@@ -74,4 +79,10 @@ jobs:
       
       - name: Push changes
         if: success()  
-        run: git push origin main
+        run: |
+          # Solo hacer push si se ha creado un nuevo commit
+          if [ $(git rev-list --count HEAD) -gt 1 ]; then
+            git push origin main
+          else
+            echo "No se realizaron cambios en esta ejecución."
+

@@ -69,5 +69,3 @@ jobs:
       - name: Push changes
         if: success()
         run: git push origin main
-      - name: Verificar contenido de diff.txt
-        run: cat diff.txt

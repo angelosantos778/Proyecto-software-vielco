@@ -21,12 +21,12 @@ jobs:
       - name: Install OpenAI package
         run: pip install openai
 
-      - name: Analyze Changes and Generate Summary
+      - name: Analyze Changes in 'Proyecto' Directory and Generate Summary
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # Detect changes in the specified HTML file
-          DIFF=$(git diff HEAD~1 -- Proyecto/src/app/inicio/inicio.component.html)
+          # Detect changes in the entire 'Proyecto' directory
+          DIFF=$(git diff HEAD~1 -- Proyecto)
           
           # If DIFF is not empty, proceed
           if [ -n "$DIFF" ]; then
@@ -36,13 +36,13 @@ jobs:
             # Only commit if commit_summary.txt has content
             if [ -s commit_summary.txt ]; then
               COMMIT_MSG=$(cat commit_summary.txt)
-              git add Proyecto/src/app/inicio/inicio.component.html
+              git add Proyecto
               git commit -m "$COMMIT_MSG"
             else
               echo "No changes detected in diff.txt to generate a summary."
             fi
           else
-            echo "No changes detected in the specified file."
+            echo "No changes detected in the 'Proyecto' directory."
           fi
       
       - name: Push changes

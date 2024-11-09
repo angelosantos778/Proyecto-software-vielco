@@ -1,8 +1,8 @@
 import openai
+import os
 import sys
 
-# Configura tu clave de API de OpenAI
-openai.api_key = "YOUR_API_KEY"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 def generate_summary(diff_text):
     prompt = f"Summarize the following changes in an HTML file:\n{diff_text}"

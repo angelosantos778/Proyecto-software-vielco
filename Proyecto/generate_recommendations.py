@@ -12,7 +12,7 @@ with open(diff_file, "r") as f:
     diff_content = f.read()
 
 # Solicitar recomendaciones a OpenAI
-openai.api_key = os.gentev("OPENAI_API_KEY")  # Este debe estar configurado en el entorno de GitHub
+openai.api_key = os.getenv("OPENAI_API_KEY")  # Este debe estar configurado en el entorno de GitHub
 
 response = openai.Completion.create(
     engine="text-davinci-003",

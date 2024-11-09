@@ -64,6 +64,6 @@ jobs:
             echo "No hay suficientes commits para generar un diff."
           fi
       - name: Push changes
-	        if: success()
-           run: git push origin main
+        if: success()
+        run: git push origin main
 

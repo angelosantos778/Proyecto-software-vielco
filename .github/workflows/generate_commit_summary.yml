@@ -5,7 +5,7 @@ on:
     branches:
       - main
 
-permissions:  # Agregar permisos de escritura para el bot
+permissions:
   contents: write
 
 jobs:
@@ -55,6 +55,23 @@ jobs:
             echo "No hay suficientes commits para generar un diff."
           fi
 
+      - name: Check for GitHub Actions Workflow Changes
+        run: |
+          ACTIONS_DIFF=$(git diff HEAD~1 -- .github/workflows)
+          if [ -n "$ACTIONS_DIFF" ]; then
+            echo "$ACTIONS_DIFF" > actions_diff.txt
+            python Proyecto/generate_actions_recommendations.py actions_diff.txt > actions_recommendations.txt
+          else
+            echo "No se detectaron cambios en los flujos de trabajo de GitHub Actions."
+        
+      - name: Display Recommendations
+        if: success()
+        run: |
+          if [ -s actions_recommendations.txt ]; then
+            cat actions_recommendations.txt
+          else
+            echo "No hay recomendaciones para cambios en los flujos de trabajo de GitHub Actions."
+      
       - name: Push changes
-        if: success()  # Solo hacer push si los pasos anteriores tuvieron éxito
+        if: success()  
         run: git push origin main

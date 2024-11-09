@@ -28,9 +28,14 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # Detectar cambios en la carpeta 'Proyecto'
-          # Si es el primer commit, usa --root para obtener el diff completo
-          DIFF=$(git diff --name-only HEAD~1 -- Proyecto || git diff --name-only --root -- Proyecto)
+          # Verificar si hay commits previos
+          if git rev-parse HEAD~1 >/dev/null 2>&1; then
+            # Usar HEAD~1 si hay commits previos
+            DIFF=$(git diff HEAD~1 -- Proyecto)
+          else
+            # Usar --root si es el primer commit
+            DIFF=$(git diff --root -- Proyecto)
+          fi
 
           # Si DIFF no está vacío, procede
           if [ -n "$DIFF" ]; then
@@ -65,4 +70,5 @@ jobs:
       - name: Push changes
         if: success()
         run: git push origin main
+
 

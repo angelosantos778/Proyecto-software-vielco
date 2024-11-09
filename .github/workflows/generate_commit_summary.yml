@@ -30,7 +30,7 @@ jobs:
           # Verificar si hay más de un commit en el historial
           if [ $(git rev-list --count HEAD) -gt 1 ]; then
             # Detectar cambios en toda la carpeta 'Proyecto'
-            DIFF=$(git diff HEAD~1 -- Proyecto)
+            DIFF=$(git diff HEAD~1 -- Proyecto/)
             
             # Si DIFF no está vacío, procede
             if [ -n "$DIFF" ]; then

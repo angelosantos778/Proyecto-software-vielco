@@ -52,7 +52,7 @@ jobs:
               fi
 
               # Generar recomendaciones de mejora
-              python Proyecto/generate_recommendations.py diff.txt > recommendations.txt
+              python Proyecto/generate_recommendations.py diff.txt > Poryecto/recommendations.txt
               if [ -s recommendations.txt ]; then
                 echo "=== Recomendaciones de Mejora ==="
                 cat recommendations.txt

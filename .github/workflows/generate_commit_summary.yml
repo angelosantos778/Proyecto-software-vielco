@@ -24,7 +24,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install OpenAI package
-        run: pip install openai
+        run: pip install openai==0.28.0
 
       - name: Analyze Changes and Generate Summary
         env:

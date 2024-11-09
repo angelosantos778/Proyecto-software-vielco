@@ -68,7 +68,7 @@ jobs:
             fi
           else
             echo "No hay suficientes commits para generar un diff en el flujo de trabajo."
-        
+
       - name: Display Recommendations
         if: success()
         run: |
@@ -76,13 +76,10 @@ jobs:
             cat actions_recommendations.txt
           else
             echo "No hay recomendaciones para cambios en los flujos de trabajo de GitHub Actions."
-      
+          fi
+
       - name: Push changes
         if: success()  
         run: |
-          # Solo hacer push si se ha creado un nuevo commit
-          if [ $(git rev-list --count HEAD) -gt 1 ]; then
-            git push origin main
-          else
-            echo "No se realizaron cambios en esta ejecución."
+          git push origin main
 

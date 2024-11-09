@@ -21,30 +21,35 @@ jobs:
       - name: Install OpenAI package
         run: pip install openai
 
-      - name: Analyze Changes in 'Proyecto' Directory and Generate Summary
+      - name: Analyze Changes and Generate Summary
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # Detect changes in the entire 'Proyecto' directory
-          DIFF=$(git diff HEAD~1 -- Proyecto)
-          
-          # If DIFF is not empty, proceed
-          if [ -n "$DIFF" ]; then
-            echo "$DIFF" > diff.txt
-            python Proyecto/generate_summary.py diff.txt > commit_summary.txt
+          # Verificar si hay más de un commit en el historial
+          if [ $(git rev-list --count HEAD) -gt 1 ]; then
+            # Detectar cambios en toda la carpeta 'Proyecto'
+            DIFF=$(git diff HEAD~1 -- Proyecto)
             
-            # Only commit if commit_summary.txt has content
-            if [ -s commit_summary.txt ]; then
-              COMMIT_MSG=$(cat commit_summary.txt)
-              git add Proyecto
-              git commit -m "$COMMIT_MSG"
+            # Si DIFF no está vacío, procede
+            if [ -n "$DIFF" ]; then
+              echo "$DIFF" > diff.txt
+              python Proyecto/generate_summary.py diff.txt > commit_summary.txt
+              
+              # Solo crear un commit si commit_summary.txt tiene contenido
+              if [ -s commit_summary.txt ]; then
+                COMMIT_MSG=$(cat commit_summary.txt)
+                git add Proyecto
+                git commit -m "$COMMIT_MSG"
+              else
+                echo "No se detectaron cambios en diff.txt para generar un resumen."
+              fi
             else
-              echo "No changes detected in diff.txt to generate a summary."
+              echo "No se detectaron cambios en la carpeta 'Proyecto'."
             fi
           else
-            echo "No changes detected in the 'Proyecto' directory."
+            echo "No hay suficientes commits para generar un diff."
           fi
-      
+
       - name: Push changes
-        if: success()  # Only push if the previous steps were successful
+        if: success()  # Solo hacer push si los pasos anteriores tuvieron éxito
         run: git push origin main

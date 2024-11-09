@@ -5,7 +5,7 @@ on:
     branches:
       - main
 
-permissions:
+permissions:  # Agregar permisos de escritura para el bot
   contents: write
 
 jobs:
@@ -43,7 +43,7 @@ jobs:
                 COMMIT_MSG=$(cat commit_summary.txt)
                 git config --global user.name "github-actions[bot]"
                 git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                git add .
+                git add Proyecto
                 git commit -m "$COMMIT_MSG"
               else
                 echo "No se detectaron cambios en diff.txt para generar un resumen."
@@ -55,30 +55,6 @@ jobs:
             echo "No hay suficientes commits para generar un diff."
           fi
 
-      - name: Check for GitHub Actions Workflow Changes
-        run: |
-          # Verificar si hay más de un commit en el historial
-          if [ $(git rev-list --count HEAD) -gt 1 ]; then
-            ACTIONS_DIFF=$(git diff HEAD~1 -- .github/workflows)
-            if [ -n "$ACTIONS_DIFF" ]; then
-              echo "$ACTIONS_DIFF" > actions_diff.txt
-              python Proyecto/generate_actions_recommendations.py actions_diff.txt > actions_recommendations.txt
-            else
-              echo "No se detectaron cambios en los flujos de trabajo de GitHub Actions."
-            fi
-          else
-            echo "No hay suficientes commits para generar un diff en el flujo de trabajo."
-
-      - name: Display Recommendations
-        if: success()
-        run: |
-          if [ -s actions_recommendations.txt ]; then
-            cat actions_recommendations.txt
-          else
-            echo "No hay recomendaciones para cambios en los flujos de trabajo de GitHub Actions."
-
       - name: Push changes
-        if: success()  
-        run: |
-          git push origin main
-
+        if: success()  # Solo hacer push si los pasos anteriores tuvieron éxito
+        run: git push origin main

@@ -18,5 +18,10 @@ def generate_summary(diff_text):
 if __name__ == "__main__":
     with open(sys.argv[1], 'r') as f:
         diff_text = f.read()
-    summary = generate_summary(diff_text)
-    print(summary)
+    
+    # Check if diff_text is not empty before calling the API
+    if diff_text.strip():
+        summary = generate_summary(diff_text)
+        print(summary)
+    else:
+        print("No changes to summarize.")

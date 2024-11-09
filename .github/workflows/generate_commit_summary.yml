@@ -24,7 +24,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install OpenAI package
-        run: pip install openai==0.28.0
+        run: pip install openai
 
       - name: Analyze Changes and Generate Summary
         env:
@@ -38,11 +38,9 @@ jobs:
             # Usar --root si es el primer commit
             DIFF=$(git diff --root -- Proyecto/)
           fi
-
           # Imprimir el contenido de DIFF para depuración
           echo "Contenido de DIFF:"
           echo "$DIFF"
-
           # Si DIFF no está vacío, procede
           if [ -n "$DIFF" ]; then
             echo "$DIFF" > diff.txt
@@ -60,7 +58,6 @@ jobs:
             else
               echo "No se detectaron cambios en diff.txt para generar un resumen."
             fi
-
             # Generar recomendaciones de mejora
             python Proyecto/generate_recommendations.py diff.txt > Proyecto/recommendations.txt
             if [ -s Proyecto/recommendations.txt ]; then
@@ -72,8 +69,8 @@ jobs:
           else
             echo "No se detectaron cambios en la carpeta 'Proyecto'."
           fi
-
       - name: Push changes
         if: success()
         run: git push origin main
+
 

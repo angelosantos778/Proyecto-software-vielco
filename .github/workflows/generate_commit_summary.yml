@@ -28,15 +28,23 @@ jobs:
           # Detect changes in the specified HTML file
           DIFF=$(git diff HEAD~1 -- Proyecto/src/app/inicio/inicio.component.html)
           
-          # Generate summary using a Python script
-          echo "$DIFF" > diff.txt
-          python Proyecto/generate_summary.py diff.txt > commit_summary.txt
-          
-          # Add the summary as a new commit message
-          COMMIT_MSG=$(cat commit_summary.txt)
-          git add Proyecto/src/app/inicio/inicio.component.html
-          git commit -m "$COMMIT_MSG"
+          # If DIFF is not empty, proceed
+          if [ -n "$DIFF" ]; then
+            echo "$DIFF" > diff.txt
+            python Proyecto/generate_summary.py diff.txt > commit_summary.txt
+            
+            # Only commit if commit_summary.txt has content
+            if [ -s commit_summary.txt ]; then
+              COMMIT_MSG=$(cat commit_summary.txt)
+              git add Proyecto/src/app/inicio/inicio.component.html
+              git commit -m "$COMMIT_MSG"
+            else
+              echo "No changes detected in diff.txt to generate a summary."
+            fi
+          else
+            echo "No changes detected in the specified file."
+          fi
       
       - name: Push changes
+        if: success()  # Only push if the previous steps were successful
         run: git push origin main
-

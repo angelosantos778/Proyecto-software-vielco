@@ -31,10 +31,10 @@ jobs:
           # Verificar si hay commits previos
           if git rev-parse HEAD~1 >/dev/null 2>&1; then
             # Usar HEAD~1 si hay commits previos
-            DIFF=$(git diff HEAD~1 -- Proyecto)
+            DIFF=$(git diff HEAD~1 -- Proyecto/)
           else
             # Usar --root si es el primer commit
-            DIFF=$(git diff --root -- Proyecto)
+            DIFF=$(git diff --root -- Proyecto/)
           fi
 
           # Si DIFF no está vacío, procede

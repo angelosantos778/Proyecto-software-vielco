@@ -1,0 +1,15 @@
+diff --git a/Proyecto/src/app/inicio/inicio.component.html b/Proyecto/src/app/inicio/inicio.component.html
+index 077eaf5..ebe9abf 100644
+--- a/Proyecto/src/app/inicio/inicio.component.html
++++ b/Proyecto/src/app/inicio/inicio.component.html
+@@ -95,7 +95,9 @@
+                                 <div class="pl-8">
+                                     -Electobombas
+                                         </div>           
+-                                    
++                                    <div class="pl-8">
++                                    -Construcción
++                                        </div> 
+                                     
+                             </div>  
+             

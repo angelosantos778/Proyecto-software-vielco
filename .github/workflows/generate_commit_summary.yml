@@ -29,10 +29,14 @@ jobs:
         run: |
           # Check if there are multiple commits
           if [ $(git rev-list --count HEAD) -gt 1 ]; then
-            DIFF=$(git diff HEAD~1 -- Proyecto/ | head -n 500)
+            DIFF=$(git diff HEAD~1 | head -n 500)
           else
-            DIFF=$(git diff --cached -- Proyecto/ | head -n 500)
+            DIFF=$(git diff --cached | head -n 500)
           fi
+
+          # Debugging: Check DIFF content
+          echo "=== Diff Content ==="
+          echo "$DIFF"
 
           if [ -n "$DIFF" ]; then
             echo "$DIFF" > diff.txt
@@ -40,9 +44,10 @@ jobs:
 
             if [ -s commit_summary.txt ]; then
               COMMIT_MSG=$(cat commit_summary.txt)
+              echo "Commit Message: $COMMIT_MSG"
               git config --global user.name "github-actions[bot]"
               git config --global user.email "github-actions[bot]@users.noreply.github.com"
-              git add Proyecto
+              git add .
               git commit -m "$COMMIT_MSG"
               git push origin main
             else
@@ -57,10 +62,10 @@ jobs:
               echo "No recommendations generated."
             fi
           else
-            echo "No changes detected in the 'Proyecto' directory."
+            echo "No changes detected in the repository."
           fi
 
       - name: Cleanup
-        run: rm -f diff.txt commit_summary.txt recommendations.txt
-
+        run: |
+          rm -f diff.txt commit_summary.txt recommendations.txt || echo "Nothing to clean."
 

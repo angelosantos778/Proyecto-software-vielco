@@ -20,50 +20,47 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install OpenAI package
+      - name: Install dependencies
         run: pip install openai
 
       - name: Analyze Changes and Generate Summary
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          # Verificar si hay más de un commit en el historial
+          # Check if there are multiple commits
           if [ $(git rev-list --count HEAD) -gt 1 ]; then
-            # Detectar cambios en toda la carpeta 'Proyecto'
-            DIFF=$(git diff HEAD~1 -- Proyecto/)
-            
-            # Si DIFF no está vacío, procede
-            if [ -n "$DIFF" ]; then
-              echo "$DIFF" > diff.txt
-              
-              # Generar el resumen del commit
-              python Proyecto/generate_summary.py diff.txt > commit_summary.txt
-              
-              # Solo crear un commit si commit_summary.txt tiene contenido
-              if [ -s commit_summary.txt ]; then
-                COMMIT_MSG=$(cat commit_summary.txt)
-                git config --global user.name "github-actions[bot]"
-                git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                git add Proyecto
-                git commit -m "$COMMIT_MSG"
-              else
-                echo "No se detectaron cambios en diff.txt para generar un resumen."
-              fi
-              # Generar recomendaciones de mejora
-              python Proyecto/generate_recommendations.py diff.txt > recommendations.txt
-              if [ -s recommendations.txt ]; then
-                echo "=== Recomendaciones de Mejora ==="
-                cat recommendations.txt
-              else
-                echo "No se generaron recomendaciones para los cambios."
-              fi
+            DIFF=$(git diff HEAD~1 -- Proyecto/ | head -n 500)
+          else
+            DIFF=$(git diff --cached -- Proyecto/ | head -n 500)
+          fi
+
+          if [ -n "$DIFF" ]; then
+            echo "$DIFF" > diff.txt
+            python Proyecto/generate_summary.py diff.txt > commit_summary.txt
+
+            if [ -s commit_summary.txt ]; then
+              COMMIT_MSG=$(cat commit_summary.txt)
+              git config --global user.name "github-actions[bot]"
+              git config --global user.email "github-actions[bot]@users.noreply.github.com"
+              git add Proyecto
+              git commit -m "$COMMIT_MSG"
+              git push origin main
             else
-              echo "No se detectaron cambios en la carpeta 'Proyecto'."
+              echo "No valid summary generated."
+            fi
+
+            python Proyecto/generate_recommendations.py diff.txt > recommendations.txt
+            if [ -s recommendations.txt ]; then
+              echo "=== Recommendations ==="
+              cat recommendations.txt
+            else
+              echo "No recommendations generated."
             fi
           else
-            echo "No hay suficientes commits para generar un diff."
+            echo "No changes detected in the 'Proyecto' directory."
           fi
-      - name: Push changes
-        if: success()
-        run: git push origin main
+
+      - name: Cleanup
+        run: rm -f diff.txt commit_summary.txt recommendations.txt
+
 
